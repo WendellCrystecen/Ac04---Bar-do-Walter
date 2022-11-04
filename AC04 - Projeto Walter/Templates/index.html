@@ -1,0 +1,493 @@
+
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+
+{% block body %}
+
+<div class="container">
+   <div class="row">
+      <div class="col md-12">
+
+         <div class="jumbotron p-3">
+
+            <h2>Gerenciar <b>pedidos </b> <button type="button" class="btn btn-success float-right bi bi-cart-plus-fill" data-toggle="modal"
+                  data-target="#mymodal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-plus-fill" viewBox="0 0 16 16">
+                     <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM9 5.5V7h1.5a.5.5 0 0 1 0 1H9v1.5a.5.5 0 0 1-1 0V8H6.5a.5.5 0 0 1 0-1H8V5.5a.5.5 0 0 1 1 0z"/>
+                   </svg></button> 
+
+                  
+            <button style="margin: 0 7px;" type="button" class="btn btn-info float-right bi bi-journal-richtext" data-toggle="modal"
+                  data-target="#mycardapio"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-journal-richtext" viewBox="0 0 16 16">
+                     <path d="M7.5 3.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm-.861 1.542 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047L11 4.75V7a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 7v-.5s1.54-1.274 1.639-1.208zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                     <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                     <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
+                   </svg></button></h2>
+                
+
+            
+
+            {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+            {% for message in messages %}
+
+            <div class="alert alert-success alert-dismissable" role="alert">
+
+               <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                  <span aria-hidden="true">x</span>
+
+               </button>
+
+
+               {{message}}
+
+
+            </div>
+
+
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+
+         <table class="table table-hover table-dark">
+
+               <tr>
+
+                  <th>Código</th>
+                  <th>Nome</th>
+                  <th>Pedidos</th>
+                  <th>Itens</th>
+                  <th>Valor</th>
+                  <th>Pag.Dinheiro</th>
+                  <th>Pag.Cartão</th>
+                  <th>Ações</th>
+
+               </tr>
+
+
+               {% for row in pedidos %}
+               <tr>
+                  <td>{{row.id}}</td>
+                  <td>{{row.nome}}</td>
+                  <td>{{row.pedidos}}</td>
+                  <td>{{row.itens_id}}</td>
+                  <td>{{row.valor}}</td>
+
+               {% if row.pag_dinheiro|int != 0 %} 
+                  <td><input type="checkbox" id="1"  checked disabled>{{row.pag_dinheiro}}</td>
+               {% endif %}
+                {% if row.pag_dinheiro|int != 1 %}  
+                  <td><input type="checkbox" id="1" disabled>{{row.pag_dinheiro}}</td>
+                {% endif %}
+                {% if row.pag_cartao|int != 0 %}
+                  <td><input type="checkbox" id="2" checked disabled>{{row.pag_cartao}}</td>
+                {% endif %}
+                {% if row.pag_cartao|int != 1 %}
+                  <td><input type="checkbox" id="2" disabled>{{row.pag_cartao}}</td>
+                {% endif %}  
+
+                  <td>
+                     <a href="/update/{{row.id}}" class="btn btn-warning btn-xs bi bi-pen-fill" data-toggle="modal"
+                        data-target="#modaledit{{row.id}}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                           <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
+                         </svg></a>
+                     <a href="/delete/{{row.id}}" class="btn btn-danger btn-xs bi bi-trash-fill"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                      </svg></a>
+
+
+                  </td>
+
+               </tr>
+
+
+               <!-- Modal Edit pedido-->
+               <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+
+                     <div class="modal-content">
+
+
+                        <div class="modal-header">
+
+
+                           <h4 class="modal-title">Atualizar informações</h4>
+
+
+                        </div>
+
+
+                        <div class="modal-body">
+
+
+                           <form action="{{url_for('update')}}" method="POST">
+
+
+                              <div class="form-group">
+
+
+                                 <label>Nome:</label>
+                                 <input type="hidden" name="id" value="{{row.id}}">
+
+                                 <input type="text" class="form-control" name="nome" value="{{row.nome}}">
+
+
+                              </div>
+
+
+
+                              <div class="form-group">
+
+
+                                 <label>Pedido:</label>
+
+                                 <input type="text" class="form-control" name="pedidos" value="{{row.pedidos}}">
+
+
+                              </div>
+
+
+                              <div class="form-group">
+
+
+                                 <label>Nome do Produto: </label>
+
+                                 <input type="text" class="form-control" name="itens_id" value="{{row.itens_id}}">
+
+
+                              </div>
+
+                              <div class="form-group">
+
+
+                                 <label>Valor:</label>
+
+                                 <input type="text" class="form-control" name="valor" value="{{row.valor}}">
+
+
+                              </div>
+                              <div class="form-group">
+
+
+                                 <label>Registre um tipo de Pagamento:</label>
+                                 <select class="form-select" aria-label="Default select example" name="tipo_pag">
+                                    <option value="naopago">Não Pago</option> 
+                                    <option value="dinheiro">Dinheiro</option>
+                                    <option value="cartao">Cartão</option>
+                                 </select>
+      
+                              </div>
+
+                              <div class="form-group">
+
+
+                                 <button class="btn btn-primary" type="submit">Atualizar</button>
+
+
+                              </div>
+
+
+                           </form>
+
+
+                        </div>
+
+
+                        <div class="modal-footer">
+
+
+                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+
+
+                        </div>
+
+
+                     </div>
+
+
+                  </div>
+
+               </div>
+
+
+               {% endfor %}
+
+            </table>
+
+
+         </div>
+
+
+
+         <!-- Modal Add pedido-->
+
+
+         <div id="mymodal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+
+                     <h4 class="modal-title">Adicionar pedido</h4>
+                  </div>
+                  <div class="modal-body">
+
+                     <form action="{{url_for('insert')}}" method="POST">
+
+
+                        <div class="form-group">
+
+                           <label>Nome:</label>
+                           <input type="text" class="form-control" name="nome" required="1">
+
+                           
+
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                           <label>Pedido:</label>
+                           <input type="number" class="form-control" name="pedidos" required="1">
+
+
+                        </div>
+
+
+                        <div class="form-group">
+
+
+                           <label>Nome do Produto:</label>
+                           <input type="text" class="form-control" name="itens_id" required="1">
+
+
+                        </div>
+
+                        <div class="form-group">
+
+
+                           <label>Valor:</label>
+                           <input type="number" step="0.01" class="form-control" name="valor" required="1">
+
+
+                        </div>
+
+                        <div class="form-group">
+
+                           <label>Registre um tipo de Pagamento:</label>
+                           <select name="tipo_pag" onchange="verifSelect(this.value)">
+                              <option value="naopago">Não Pago</option> 
+                              <option value="dinheiro">Dinheiro</option>
+                              <option value="cartao">Cartão</option>
+                           </select>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+
+                           <button class="btn btn-primary" type="submit">Adicionar pedido</button>
+
+
+                        </div>
+
+
+                     </form>
+                     <div class="container py-3">
+                        <div id="part0" class="row" style="display:none;">
+                           <h3 id="msg" class="text-center"></h3>
+                           <div  class="progress" >
+                           <div  id="part1" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;display: none" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>            
+                           <div id="part2" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%; display: none" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>            
+                           <div id="part3" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 75%; display: none" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>            
+                           <div id="part4" class="progress-bar  bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%; display: none" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="modal-footer">
+                     
+
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+
+
+                  </div>
+
+
+               </div>
+
+
+            </div>
+
+
+         </div>
+
+         <!-- Modal Cardapio-->
+
+
+         <div id="mycardapio" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header" style="background-color: rgb(203, 203, 203);">
+
+                     <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">Cod.Produto</th>
+                            <th scope="col">Produto</th>
+                            <th scope="col">Valor</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">2369</th>
+                            <td>Coxinha</td>
+                            <td>R$ 06.00</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2055</th>
+                            <td>Esfiha</td>
+                            <td>R$ 06.00</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2632</th>
+                            <td>Pastel</td>
+                            <td>R$ 08.00</td>
+                          </tr>
+                          <tr>
+                           <th scope="row">2424</th>
+                           <td>Kibe</td>
+                           <td>R$ 06.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">2234</th>
+                           <td>Enroladinho</td>
+                           <td>R$ 06.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">2523</th>
+                           <td>Empadinha</td>
+                           <td>R$ 06.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">2413</th>
+                           <td>Beirute</td>
+                           <td>R$ 11.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">9631</th>
+                           <td>Skol</td>
+                           <td>R$ 12.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">9666</th>
+                           <td>Antarctica</td>
+                           <td>R$ 09.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">9304</th>
+                           <td>Heineken</td>
+                           <td>R$ 16.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">9022</th>
+                           <td>Brahma</td>
+                           <td>R$ 10.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">8563</th>
+                           <td>Coca-Cola</td>
+                           <td>R$ 05.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">8643</th>
+                           <td>Itubaína</td>
+                           <td>R$ 04.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">8145</th>
+                           <td>Guaraná</td>
+                           <td>R$ 04.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">8578</th>
+                           <td>Água</td>
+                           <td>R$ 03.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">8597</th>
+                           <td>Suco(Lata)</td>
+                           <td>R$ 07.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">6123</th>
+                           <td>Seleta</td>
+                           <td>R$ 02.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">6666</th>
+                           <td>Kariri</td>
+                           <td>R$ 02.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">6593</th>
+                           <td>Boazinha</td>
+                           <td>R$ 02.00</td>
+                         </tr>
+                         <tr>
+                           <th scope="row">6763</th>
+                           <td>Bebida: 51</td>
+                           <td>R$ 02.00</td>
+                         </tr>
+
+                        </tbody>
+                      </table>
+
+                  <div class="modal-footer">
+                     
+
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+
+
+                  </div>
+
+
+               </div>
+
+
+            </div>
+
+
+         </div>
+
+
+
+
+
+      </div>
+
+   </div>
+
+
+</div>
+<footer>
+   <a href="{{url_for('logout')}}" class="btn btn-danger btn-xs bi bi-box-arrow-left"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
+      <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+    </svg></a>
+</footer>
+
+{% endblock %}
+
